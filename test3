@@ -1,0 +1,5 @@
+Dummy scripts
+#!/bin/bash
+echo "Hello i am testing jinikns fist prg jenkins"
+uptime
+date
