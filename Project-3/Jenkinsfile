@@ -26,7 +26,10 @@ pipeline {
             steps {
                 dir('Project-3') {
                     script {
-                        sh 'terraform plan -var="name=${params.name}" -var="email=${params.email}"'
+                        // Use proper escaping for variables
+                        sh """
+                            terraform plan -var="name=${params.name}" -var="email=${params.email}"
+                        """
                     }
                 }
             }
@@ -36,7 +39,10 @@ pipeline {
             steps {
                 dir('Project-3') {
                     script {
-                        sh 'terraform apply -auto-approve -var="name=${params.name}" -var="email=${params.email}"'
+                        // Use proper escaping for variables
+                        sh """
+                            terraform apply -auto-approve -var="name=${params.name}" -var="email=${params.email}"
+                        """
                     }
                 }
             }

@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"  
+  region = "us-east-1"
 }
 
 variable "name" {
@@ -46,13 +46,18 @@ resource "aws_iam_access_key" "access_key" {
   user = aws_iam_user.s3_user.name
 }
 
-# Send the IAM user details (name, email, access key) to the user
+# SES Email Identity (needed for email sending)
 resource "aws_ses_email_identity" "email_identity" {
   email = var.email
 }
 
-resource "aws_ses_send_email" "send_user_details" {
-  to_addresses = [var.email]
-  subject      = "Your AWS IAM User Details"
-  body         = "Dear ${var.name},\n\nHere are your IAM user details:\n\nUsername: ${var.name}\nAccess Key: ${aws_iam_access_key.access_key.id}\n\nPlease keep these credentials safe.\n\nBest Regards, AWS Admin"
+# A placeholder for email sending via Lambda or external service
+resource "null_resource" "send_user_details" {
+  provisioner "local-exec" {
+    command = <<EOT
+      echo "Dear ${var.name},\\n\\nHere are your IAM user details:\\n\\nUsername: ${var.name}\\nAccess Key: ${aws_iam_access_key.access_key.id}\\n\\nPlease keep these credentials safe.\\n\\nBest Regards, AWS Admin" | mail -s "Your AWS IAM User Details" ${var.email}
+    EOT
+  }
+
+  depends_on = [aws_iam_access_key.access_key]
 }
