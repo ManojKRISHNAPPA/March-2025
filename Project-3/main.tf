@@ -2,6 +2,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
+# Variables for IAM user, email sender, and email receiver
 variable "name" {
   description = "The IAM username"
   type        = string
@@ -9,6 +10,16 @@ variable "name" {
 
 variable "email" {
   description = "The IAM user's email address"
+  type        = string
+}
+
+variable "sender_email" {
+  description = "The email address from which the message will be sent"
+  type        = string
+}
+
+variable "receiver_email" {
+  description = "The email address that will receive the message"
   type        = string
 }
 
@@ -51,11 +62,15 @@ resource "aws_ses_email_identity" "email_identity" {
   email = var.email
 }
 
-# A placeholder for email sending via Lambda or external service
+# A placeholder for email sending via AWS SES
 resource "null_resource" "send_user_details" {
   provisioner "local-exec" {
     command = <<EOT
-      echo "Dear ${var.name},\\n\\nHere are your IAM user details:\\n\\nUsername: ${var.name}\\nAccess Key: ${aws_iam_access_key.access_key.id}\\n\\nPlease keep these credentials safe.\\n\\nBest Regards, AWS Admin" | mail -s "Your AWS IAM User Details" ${var.email}
+      aws ses send-email \
+        --from "manojdevopstest@gmail.com" \
+        --to "${var.receiver_email}" \
+        --subject "Your AWS IAM User Details" \
+        --text "Dear ${var.name},\\n\\nHere are your IAM user details:\\n\\nUsername: ${var.name}\\nAccess Key: ${aws_iam_access_key.access_key.id}\\n\\nPlease keep these credentials safe.\\n\\nBest Regards, AWS Admin"
     EOT
   }
 
