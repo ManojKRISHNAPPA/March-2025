@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Terraform Init') {
             steps {
-                dir('Project3') {
+                dir('Project-3') {
                     script {
                         sh 'terraform init'
                     }
@@ -24,7 +24,7 @@ pipeline {
 
         stage('Terraform Plan') {
             steps {
-                dir('Project3') {
+                dir('Project-3') {
                     script {
                         sh 'terraform plan -var="name=${params.name}" -var="email=${params.email}"'
                     }
@@ -34,7 +34,7 @@ pipeline {
 
         stage('Terraform Apply') {
             steps {
-                dir('Project3') {
+                dir('Project-3') {
                     script {
                         sh 'terraform apply -auto-approve -var="name=${params.name}" -var="email=${params.email}"'
                     }
