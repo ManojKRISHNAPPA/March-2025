@@ -16,7 +16,6 @@ pipeline {
             steps {
                 dir('Project-3') {
                     script {
-                        // Initialize Terraform
                         sh 'terraform init'
                     }
                 }
@@ -27,9 +26,9 @@ pipeline {
             steps {
                 dir('Project-3') {
                     script {
-                        // Run Terraform plan, passing parameters properly
+                        // Use proper escaping for variables
                         sh """
-                            terraform plan -var='name=${params.name}' -var='email=${params.email}'
+                            terraform plan -var="name=${params.name}" -var="email=${params.email}"
                         """
                     }
                 }
@@ -40,9 +39,9 @@ pipeline {
             steps {
                 dir('Project-3') {
                     script {
-                        // Apply Terraform configuration with auto-approve, passing parameters properly
+                        // Use proper escaping for variables
                         sh """
-                            terraform apply -auto-approve -var='name=${params.name}' -var='email=${params.email}'
+                            terraform apply -auto-approve -var="name=${params.name}" -var="email=${params.email}"
                         """
                     }
                 }
@@ -50,3 +49,5 @@ pipeline {
         }
     }
 }
+
+
