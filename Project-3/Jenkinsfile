@@ -14,32 +14,28 @@ pipeline {
     stages {
         stage('Terraform Init') {
             steps {
-                dir('Project-3') {
-                    script {
-                        sh 'terraform init'
-                    }
+                script {
+                    sh 'cd Project3/'
+                    sh 'terraform init' 
                 }
             }
         }
-
         stage('Terraform Plan') {
             steps {
-                dir('Project-3') {
-                    script {
-                        sh 'terraform plan -var="name=${params.name}" -var="email=${params.email}"'
-                    }
+                script {
+                    sh 'cd Project3/'
+                    sh 'terraform plan -var="name=${params.name}" -var="email=${params.email}"'  
                 }
             }
         }
-
         stage('Terraform Apply') {
             steps {
-                dir('Project-3') {
-                    script {
-                        sh 'terraform apply -auto-approve -var="name=${params.name}" -var="email=${params.email}"'
-                    }
+                script {
+                    sh 'cd Project3/'
+                    sh 'terraform apply -auto-approve -var="name=${params.name}" -var="email=${params.email}"'  
                 }
             }
         }
     }
+
 }
